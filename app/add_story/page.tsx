@@ -1,11 +1,12 @@
 "use client";
 
-import { title } from "@/components/primitives";
+import { subtitle, title } from "@/components/primitives";
 import { Card } from "@nextui-org/card";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/breadcrumbs";
 import { Input, Textarea } from "@nextui-org/input";
 import { Divider } from "@nextui-org/divider";
 import { Button } from "@nextui-org/button";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem } from "@nextui-org/dropdown";
 import Link from "next/link";
 
 export default function AddStory() {
@@ -21,30 +22,33 @@ export default function AddStory() {
         <div className={title()}>Add Story</div>
         <Card className="mt-5 h-screen">
           <Card className="my-5 mx-10 py-10">
-            <div className="ml-10 flex justify-evenly">
-              <div>
-                <p>Title</p>
-                <Input size="sm" type="email" placeholder="Enter your title" />
+            <div className="flex flex-row gap-3 mx-10">
+              <div className="w-full">
+                <p className={subtitle()}>Title</p>
+                <Input fullWidth size="sm" type="email" placeholder="Enter your title" />
               </div>
-              <p>Writer Name</p>
-            </div>
-          </Card>
-          <Card className="my-5 mx-10 py-10">
-            <div className="ml-10 flex justify-around">
-              <div>
-                <p>Synopsis</p>
-                <Textarea placeholder="Enter your synopsis" className="max-w-xs" />
+              <div className="w-full">
+                <p className={subtitle()}>Writer Name</p>
+                <Input fullWidth size="sm" type="email" placeholder="Enter your title" />
               </div>
             </div>
           </Card>
-          <div className="ml-10 flex gap-10">
-            <p>Category</p>
-            <p>Tags/Keyword Story</p>
-          </div>
-          <div className="ml-10 flex gap-10">
-            <p>Cover Image</p>
-            <p>Status</p>
-          </div>
+          <Card className="mb-5 mx-10 py-10">
+            <div className="flex flex-row gap-3 mx-10">
+              <div className="w-full">
+                <p className={subtitle()}>Synopsis</p>
+                <Textarea fullWidth placeholder="Enter your synopsis" className="mt-2" />
+              </div>
+            </div>
+          </Card>
+          <Card className="mb-5 mx-10 py-10">
+            <div className="flex flex-row gap-3 mx-10">
+              <div className="w-full">
+                <p className={subtitle()}>Synopsis</p>
+                <Textarea fullWidth placeholder="Enter your synopsis" className="mt-2" />
+              </div>
+            </div>
+          </Card>
           <Divider className="my-4" />
           <div className="flex justify-end mx-10 my-10">
             <Link href={"/add_chapter"}>

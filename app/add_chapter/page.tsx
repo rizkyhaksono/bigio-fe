@@ -7,6 +7,7 @@ import { Input } from "@nextui-org/input";
 import { Divider } from "@nextui-org/divider";
 import { Button } from "@nextui-org/button";
 import MyEditor from "@/components/rich-text";
+import Link from "next/link";
 
 export default function AddChapter() {
   return (
@@ -32,9 +33,11 @@ export default function AddChapter() {
             <MyEditor />
           </Card>
           <div className="mx-10 flex gap-3 pt-10 justify-end">
-            <Button color="default" variant="bordered" size="md">
-              Cancel
-            </Button>
+            <Link href={"/add_story"}>
+              <Button color="default" variant="bordered" size="md">
+                Cancel
+              </Button>
+            </Link>
             <Button color="primary" variant="shadow" size="md">
               Save
             </Button>
