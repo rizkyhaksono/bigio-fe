@@ -8,24 +8,36 @@ import { Skeleton } from "@nextui-org/skeleton";
 import Link from "next/link";
 import { DotIcon } from "@/components/icons";
 import { useGetStoryQuery } from "@/redux/api/storiesApi";
-import { useGetStatusesQuery } from "@/redux/api/statusesApi";
+import { useGetStatusQuery } from "@/redux/api/statusesApi";
 import { useGetTagsQuery } from "@/redux/api/tagsApi";
 import { useGetStoryTagQuery } from "@/redux/api/storyTagApi";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/modal";
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownSection, DropdownItem } from "@nextui-org/dropdown";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/breadcrumbs";
+import { useMemo, useState } from "react";
 
 export default function StoryPage() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const { data: dataStories, error: errorStories, isLoading: loadingStories } = useGetStoryQuery(arguments);
-  const { data: dataStatus, error: errorStatus, isLoading: loadingStatus } = useGetStatusesQuery(arguments);
+  const { data: dataStatus, error: errorStatus, isLoading: loadingStatus } = useGetStatusQuery(arguments);
   const { data: dataTags, error: errorTags, isLoading: loadingTags } = useGetTagsQuery(arguments);
   const { data: dataStoryTags, error: errorStoryTag, isLoading: loadingStoryTag } = useGetStoryTagQuery(arguments);
 
   const statuses = dataStatus && dataStatus.data;
   const tags = dataTags && dataTags.data;
   const storyTags = dataStoryTags && dataStoryTags.data;
+
+  const [selectedKeys, setSelectedKeys] = useState(new Set(["Technology"]));
+  const [selectedStatus, setSelectedStatus] = useState(new Set(["Publish"]));
+
+  const handleSelectionChange = (keys: Set<string>) => {
+    setSelectedKeys(keys);
+    setSelectedStatus(keys);
+  };
+
+  const selectedValue = useMemo(() => Array.from(selectedKeys).join(", ").replaceAll("_", " "), [selectedKeys]);
+  const selectedStatusValue = useMemo(() => Array.from(selectedStatus).join(", ").replaceAll("_", " "), [selectedStatus]);
 
   return (
     <>
@@ -45,29 +57,35 @@ export default function StoryPage() {
               {(onClose) => (
                 <>
                   <ModalHeader className="flex flex-col gap-1">Filter</ModalHeader>
-                  <ModalBody>
-                    <p>Categories</p>
+                  <div className="flex flex-col">
+                    <p className="ml-10">Category</p>
                     <Dropdown>
                       <DropdownTrigger>
-                        <Button variant="flat">Categories</Button>
+                        <Button variant="bordered" className="capitalize mx-10">
+                          {selectedValue}
+                        </Button>
                       </DropdownTrigger>
-                      <DropdownMenu aria-label="Static Actions">
-                        <DropdownItem key="financial">Financial</DropdownItem>
+                      <DropdownMenu onSelectionChange={() => handleSelectionChange} aria-label="Single selection example" variant="flat" disallowEmptySelection selectionMode="single" selectedKeys={selectedKeys}>
                         <DropdownItem key="technology">Technology</DropdownItem>
+                        <DropdownItem key="financial">Financial</DropdownItem>
                         <DropdownItem key="health">Health</DropdownItem>
                       </DropdownMenu>
                     </Dropdown>
-                    <p className="mt-2">Status</p>
+                  </div>
+                  <div className="flex flex-col mt-5">
+                    <p className="ml-10">Status</p>
                     <Dropdown>
                       <DropdownTrigger>
-                        <Button variant="flat">Status</Button>
+                        <Button variant="bordered" className="capitalize mx-10">
+                          {selectedStatusValue}
+                        </Button>
                       </DropdownTrigger>
-                      <DropdownMenu aria-label="Static Actions">
-                        <DropdownItem key="financial">Publish</DropdownItem>
-                        <DropdownItem key="technology">Draft</DropdownItem>
+                      <DropdownMenu onSelectionChange={() => handleSelectionChange} aria-label="Single selection example" variant="flat" disallowEmptySelection selectionMode="single" selectedKeys={selectedStatus}>
+                        <DropdownItem key="publish">Publish</DropdownItem>
+                        <DropdownItem key="draft">Draft</DropdownItem>
                       </DropdownMenu>
                     </Dropdown>
-                  </ModalBody>
+                  </div>
                   <ModalFooter className="mt-16">
                     <Button color="default" variant="light" onPress={onClose}>
                       Reset
@@ -91,7 +109,7 @@ export default function StoryPage() {
         </div>
       </div>
       <div className="flex flex-col mt-5">
-        {(loadingStories || loadingStatus || loadingTags || loadingTags) && (
+        {(loadingStories || loadingStatus || loadingTags || loadingTags || loadingStoryTag) && (
           <div>
             <Skeleton className="h-3 w-3/5 rounded-lg mt-5" />
             <Skeleton className="h-3 w-4/5 rounded-lg mt-5" />
@@ -105,30 +123,28 @@ export default function StoryPage() {
           <Table aria-label="Story List Table">
             <TableHeader>
               <TableColumn>Title</TableColumn>
-              <TableColumn>Writes</TableColumn>
+              <TableColumn>Writer</TableColumn>
               <TableColumn>Category</TableColumn>
               <TableColumn>Status</TableColumn>
               <TableColumn>Tags</TableColumn>
               <TableColumn>Action</TableColumn>
             </TableHeader>
             <TableBody>
-              {dataStories.data.map((story: any) => (
-                <TableRow key={story.StoryID}>
-                  <TableCell>{story.Title}</TableCell>
-                  <TableCell>{story.Author}</TableCell>
-                  <TableCell>{story.Category}</TableCell>
-                  <TableCell>{statuses && statuses.filter((status: any) => status.StatusID === story.StatusID).map((filteredStatus: any) => filteredStatus.StatusName)}</TableCell>
+              {dataStories.data[0].map((story: any) => (
+                <TableRow key={story.story_id}>
+                  <TableCell>{story.title}</TableCell>
+                  <TableCell>{story.author}</TableCell>
+                  <TableCell>{story.category}</TableCell>
+                  <TableCell>{statuses && statuses.find((status: any) => status.status_id === story.status_id)?.status_name}</TableCell>
                   <TableCell>
                     {storyTags &&
                       storyTags
-                        .filter((storyTag: any) => storyTag.StoryID === story.StoryID)
-                        .map((storyTag: any) =>
-                          tags && tags.find((tag: any) => tag.TagID === storyTag.TagID) ? (
-                            <span className="bg-slate-100 dark:bg-gray-800 py-1 px-4 rounded-lg text-black dark:text-white" key={storyTag.TagID}>
-                              {tags.find((tag: any) => tag.TagID === storyTag.TagID)?.TagName},{" "}
-                            </span>
-                          ) : null
-                        )}
+                        .filter((storyTag: any) => storyTag.story_id === story.story_id)
+                        .map((storyTag: any) => (
+                          <span className="bg-slate-100 dark:bg-gray-800 py-1 px-4 rounded-lg text-black dark:text-white" key={storyTag.tag_id}>
+                            {tags && tags.find((tag: any) => tag.tag_id === storyTag.tag_id)?.tag_name},{" "}
+                          </span>
+                        ))}
                   </TableCell>
                   <TableCell>
                     <Dropdown>
@@ -138,8 +154,8 @@ export default function StoryPage() {
                         </Button>
                       </DropdownTrigger>
                       <DropdownMenu aria-label="Static Actions">
-                        <DropdownItem key="financial">Story Detail</DropdownItem>
-                        <DropdownItem key="technology">Edit Story</DropdownItem>
+                        <DropdownItem key="story-detail">Story Detail</DropdownItem>
+                        <DropdownItem key="edit-story">Edit Story</DropdownItem>
                       </DropdownMenu>
                     </Dropdown>
                   </TableCell>
