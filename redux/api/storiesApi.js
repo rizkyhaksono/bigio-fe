@@ -46,7 +46,7 @@ export const storiesApi = baseApi.enhanceEndpoints({}).injectEndpoints({
           method: "GET",
         }),
       }),
-      postStory: builder.query({
+      postStory: builder.mutation({
         query: (newStory) => ({
           url: `/stories`,
           method: "POST",
@@ -70,4 +70,4 @@ export const storiesApi = baseApi.enhanceEndpoints({}).injectEndpoints({
   },
 });
 
-export const { useGetStoryQuery, usePostStoryQuery, usePutStoryMutation, useDeleteStoryMutation } = storiesApi;
+export const { useGetStoryQuery, usePostStoryMutation, usePutStoryMutation, useDeleteStoryMutation } = storiesApi;

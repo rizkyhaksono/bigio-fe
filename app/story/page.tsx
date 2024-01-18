@@ -142,7 +142,8 @@ export default function StoryPage() {
                         .filter((storyTag: any) => storyTag.story_id === story.story_id)
                         .map((storyTag: any) => (
                           <span className="bg-slate-100 dark:bg-gray-800 py-1 px-4 rounded-lg text-black dark:text-white" key={storyTag.tag_id}>
-                            {tags && tags.find((tag: any) => tag.tag_id === storyTag.tag_id)?.tag_name},{" "}
+                            {tags && tags.filter((tag: any) => tag.tag_id === storyTag.tag_id).map((matchingTag: any) => matchingTag.tag_name)}
+                            {", "}
                           </span>
                         ))}
                   </TableCell>
