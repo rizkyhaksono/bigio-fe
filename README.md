@@ -1,40 +1,47 @@
-# Next.js & NextUI Template
+# BigIO Frontend
 
-This is a template for creating applications using Next.js 13 (app directory) and NextUI (v2).
+## Introduction
 
-## Technologies Used
+This repo made for Frondend Project BigIO Fullstack Developer intern
 
-- [Next.js 13](https://nextjs.org/docs/getting-started)
-- [NextUI v2](https://nextui.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Tailwind Variants](https://tailwind-variants.org)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [next-themes](https://github.com/pacocoursey/next-themes)
+## Table of Contents
 
-## How to Use
+- [Introduction](#introduction)
+- [Features](#features)
+- [Libraries](#libraries)
+- [Project Structure](#project-structure)
+- [Website URL](#website-url)
 
+## Features
 
-### Use the template with create-next-app
+- Story List
+- Add Story
+- Story Detail
+- Edit Story
 
-To create a new project based on this template using `create-next-app`, run the following command:
+## Libraries
 
-```bash
-npx create-next-app -e https://github.com/nextui-org/next-app-template
-```
+- NextJS 14
+- ReactJS
+- NextUI
+- frame-motion
+- next-theme
+- redux toolkit
+- Tailwindcss
 
-### Install dependencies
+## Project Structure
 
-```bash
-npm install
-```
+- `app`
+  - `add_chapter`
+  - `add_story`
+  - `story`
+- `components`
+- `config`
+- `redux`
+  - `api`
+- `styles`
+- `types`
 
-### Run the development server
+## Website URL
 
-```bash
-npm run dev
-```
-
-## License
-
-Licensed under the [MIT license](https://github.com/nextui-org/next-app-template/blob/main/LICENSE).
+<https://bigiofe.natee.my.id/>
